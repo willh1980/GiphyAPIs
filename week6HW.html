@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>API Homework</title>
+
+  <link rel="stylesheet" type="text/css" href="week6.css">
+
+</head>
+    
+
+<body id=background>
+        <div id=buttonsDiv></div>
+        <br>
+        <br>
+        <div>
+                <form id="gif-form">
+                        <label for="comedian-input">Dont be shy, add a comedian!!!</label>  <input type="text" id="comedian-input"><br><br>
+                        <input type= "submit" id="add-comedian" value="Add Another Comedian">
+                        <br>
+                        <br>
+                        <br>
+        </div>
+        
+        
+    
+          
+        <div id=gifsDiv></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    // I'm going to need an array of comedians for my gif
+        var comedians = ["Eddie Murphy", "Steve Carell", "Kevin Hart", "Redd Foxx", "Will Ferrell", "Chris Rock", "Zach Galifianakis", "Chris Tucker"]
+
+        function renderButtons() {
+
+            
+            $("#buttonsDiv").empty();
+
+            // Looping through the array of comedians
+            for (var i = 0; i < comedians.length; i++) {
+
+           
+                var button = $("<button>");
+                
+                button.addClass("comics");
+                
+                button.attr("data-name", comedians[i]);
+                
+                button.text(comedians[i]);
+                
+                $("#buttonsDiv").append(button);
+            }
+        }
+
+        renderButtons();
+
+                $("button").on("click", function() {
+                    var person = $(this).attr("data-name");
+                    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=d940myRyx7yXdt5bL3I6B2Wm24cVoPw7&q=" + person + "&limit=10&offset=0&rating=G&lang=en";
+                    $.ajax({
+                      url: queryURL,
+                      method: "GET"
+                    })
+                      .then(function(response) {
+                        var results = response.data;
+
+                        for (var i = 0; i < results.length; i++) {
+                          var gifDiv = $("<div>");
+
+                          var rating = results[i].rating;
+
+                          var p = $("<p>").text("Rating: " + rating);
+
+                          var personImage = $("<img>");
+                          personImage.attr("src", results[i].images.fixed_height_still.url);
+                          personImage.attr("animate", results[i].images.fixed_height.url);
+                          personImage.attr("still", results[i].images.fixed_height_still.url);
+                        
+                          gifDiv.prepend(p);
+                          gifDiv.prepend(personImage);
+
+                          $("#gifsDiv").prepend(gifDiv)
+
+                          personImage.on("click", function() {
+                            var imageStatus = $(this).attr("src")
+                            
+                            if(imageStatus === $(this).attr("still")) {
+                              $(this).attr("src", $(this).attr("animate"))
+                            }
+                            else {
+                              $(this).attr("src", $(this).attr("still"))
+                            }
+
+                            console.log(this)
+                          });
+                          
+                        }
+                      });
+
+                });
+
+              $("#add-comedian").on("click", function(event) {
+                
+                event.preventDefault();
+
+                // This line will grab the text from the input box
+                var comedian = $("#comedian-input").val().trim();
+                // The movie from the textbox is then added to our array
+                comedians.push(comedian);
+
+                // calling renderButtons which handles the processing of our movie array
+                renderButtons();
+
+                console.log(comedians)
+
+                
+
+                  $("button").on("click", function() {
+                    var person = $(this).attr("data-name");
+                    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=d940myRyx7yXdt5bL3I6B2Wm24cVoPw7&q=" + person + "&limit=10&offset=0&rating=G&lang=en";
+                    $.ajax({
+                      url: queryURL,
+                      method: "GET"
+                    })
+                      .then(function(response) {
+                        var results = response.data;
+
+                        for (var i = 0; i < results.length; i++) {
+                          var gifDiv = $("<div>");
+
+                          var rating = results[i].rating;
+
+                          var p = $("<p>").text("Rating: " + rating);
+
+                          var personImage = $("<img>");
+                          personImage.attr("src", results[i].images.fixed_height_still.url);
+                          personImage.attr("animate", results[i].images.fixed_height.url);
+                          personImage.attr("still", results[i].images.fixed_height_still.url);
+
+                          gifDiv.prepend(p);
+                          gifDiv.prepend(personImage);
+
+                          $("#gifsDiv").prepend(gifDiv);
+
+                          personImage.on("click", function() {
+                            var imageStatus = $(this).attr("src")
+                            
+                            if(imageStatus === $(this).attr("still")) {
+                              $(this).attr("src", $(this).attr("animate"))
+                            }
+                            else {
+                              $(this).attr("src", $(this).attr("still"))
+                            }
+                          });
+                        }
+                      });
+
+
+                  });
+
+              });
+
+              console.log(comedians)
+              
+              
+                
+    </script>
+
+  
+</body>
+
+</html>

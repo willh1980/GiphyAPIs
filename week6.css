@@ -1,0 +1,20 @@
+.comics {
+    height: 26px;
+    margin: 5px;
+    font-size: 16px;
+    background-color: aqua;
+}
+
+#add-comedian {
+    height: 24px;
+    background-color: rgb(94, 247, 158)
+}
+
+#comedian-input {
+    height: 20px;
+    font-size: 16px;
+}
+
+#background {
+    background-color: rgb(180, 175, 175);
+}
